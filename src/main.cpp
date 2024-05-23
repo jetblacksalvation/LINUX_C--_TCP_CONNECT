@@ -53,7 +53,7 @@ public:
     
         
     }
-    struct sockaddr acceptLoop() 
+    int acceptLoop() 
     {
         for (;;)
         {
@@ -65,7 +65,7 @@ public:
             {
                 perror("accept() failed\n");
                 /* exit(), break, continue, whatever ... */
-                exit(EXIT_FAILURE);
+                return(EXIT_FAILURE);
             }
             unsigned char buf [255];
 
@@ -75,9 +75,11 @@ public:
 
             close(child_fd);
         }
+        return(EXIT_SUCCESS);
 
     }
-    string getLocalIp(){
+    string getLocalIp()
+    {
         struct ifaddrs *ifap, *ifa;
         struct sockaddr_in *sa;
 

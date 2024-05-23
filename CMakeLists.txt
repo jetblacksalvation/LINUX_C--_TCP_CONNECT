@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
+project(TCPCONNECT LANGUAGES CXX)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" )
+file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.hpp")
+
+add_executable(TCPCONNECT src/main.cpp ${SOURCES})
+include_directories(${HEADERS})
