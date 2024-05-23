@@ -3,10 +3,12 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
+#include <netdb.h>
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <ifaddrs.h>
 #include <string.h>
+#include <unistd.h>
 
 
 class TcpConnection 
@@ -17,22 +19,19 @@ public:
     
     TcpConnection(string IpAddr)
     {
-        
-        connect();
+    
+        tcpConnect();
     }
     TcpConnection()
     {
         this->IpAddr = getLocalIp();
-        connect();
+        tcpConnect();
     }
     ~TcpConnection()
     {
-        if( socket_fd >= 0 )
-        {
-        }
+        close(this->socket_fd);
     }
-
-    void connect()
+    void tcpConnect()
     {
         this->socket_fd = GetSocketFd();
         if(this->IpAddr == "")
@@ -41,12 +40,42 @@ public:
         }
         strncpy(this->full_addr.sa_data, this->IpAddr.c_str(), 14);
         
-        if (bind(this->socket_fd, (struct sockaddr *) &this->socket_addr,sizeof(this->full_addr)) < 0){
+        if (bind(this->socket_fd, (struct sockaddr *) &this->socket_addr,sizeof(this->full_addr)) < 0)
+        {
             puts("ERROR on binding");
             exit(EXIT_FAILURE);
         }
         puts("NO ERR");
+        printf("Hello, Server http://%s:9999\n",this->IpAddr.c_str());
+        listen(this->socket_fd,1);// backlong = amount of pending requests from clients
+        unsigned int result = 0 ;
+        acceptLoop();
+    
         
+    }
+    struct sockaddr acceptLoop() 
+    {
+        for (;;)
+        {
+            struct sockaddr  addr ;
+            socklen_t addrlen = sizeof addr;
+
+            int child_fd = accept(this->socket_fd, &addr, &addrlen);
+            if (-1 == child_fd)
+            {
+                perror("accept() failed\n");
+                /* exit(), break, continue, whatever ... */
+                exit(EXIT_FAILURE);
+            }
+            unsigned char buf [255];
+
+            int result = read(child_fd,buf,255);            
+            /* Do stuff. */
+            printf("READ was %d and buf is %s\n",result, buf);
+
+            close(child_fd);
+        }
+
     }
     string getLocalIp(){
         struct ifaddrs *ifap, *ifa;

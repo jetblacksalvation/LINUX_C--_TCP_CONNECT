@@ -64,5 +64,6 @@
     "functional": "cpp",
     "tuple": "cpp",
     "utility": "cpp"
-  }
+  },
+  "discord.enabled": true
 }
