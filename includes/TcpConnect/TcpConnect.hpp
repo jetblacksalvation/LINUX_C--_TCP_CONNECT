@@ -16,7 +16,7 @@ public:
 
     // Public member functions
     void tcpConnect();
-    virtual void parseClientRequest(unsigned char buf[255], int result);
+    virtual void parseAndTryResponse(unsigned char buf[255], int result, int child_fd);
     int acceptLoop();
     static std::string getLocalIp();
     int GetSocketFd();
@@ -25,7 +25,8 @@ public:
 
 private:
     // Private member variables
-    struct sockaddr_in socket_addr { .sin_family=AF_INET,.sin_port={ (htons((uint16_t)9999)) }, .sin_addr={.s_addr=INADDR_ANY}};
+    int sock_port = 9999;
+    struct sockaddr_in socket_addr { .sin_family=AF_INET,.sin_port={ (htons((uint16_t)sock_port)) }, .sin_addr={.s_addr=INADDR_ANY}};
     struct sockaddr full_addr{.sa_family=AF_INET,};
     int socket_fd = -1;
 };

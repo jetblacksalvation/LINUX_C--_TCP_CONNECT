@@ -11,7 +11,11 @@
 #include <ifaddrs.h>
 #include <string.h>
 #include <unistd.h>
-
+void ForceConnect(int server_fd)
+{
+    int opt = 1; 
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
+}
 TcpConnection::TcpConnection(std::string IpAddr)
 {
     this->IpAddr = IpAddr;
@@ -30,21 +34,21 @@ void TcpConnection::tcpConnect()
     //     this->IpAddr = getLocalIp();
     // }
     strncpy(this->full_addr.sa_data, this->IpAddr.c_str(), 14);
-
+    ForceConnect(this->socket_fd);
     if (bind(this->socket_fd, (struct sockaddr *)&this->socket_addr, sizeof(this->socket_addr)) < 0)
     {
         std::cerr << "ERROR on binding" << std::endl;
         exit(EXIT_FAILURE);
     }
     std::cout << "NO ERR" << std::endl;
-    std::cout << "Hello, Server http://" << this->IpAddr << ":9999" << std::endl;
+    std::cout << "Hello, Server http://" << this->IpAddr << ":"<<this->sock_port << std::endl;
     listen(this->socket_fd, 1); // backlog = amount of pending requests from clients
     acceptLoop();
 }
 
-void TcpConnection::parseClientRequest(unsigned char buf[255], int result)
+void TcpConnection::parseAndTryResponse(unsigned char buf[255], int result, int child_fd)
 {
-    static_assert("Virtual Function parseClientRequest must be defined.");
+    static_assert("Virtual Function parseAndTryResponse must be defined.");
     throw(std::runtime_error("Virtual function must be defined."));
     // if (result >= 0)
     // {
@@ -68,7 +72,8 @@ int TcpConnection::acceptLoop()
             return EXIT_FAILURE;
         }
         unsigned char buf[255];
-        parseClientRequest(buf, read(child_fd, buf, 255));
+        parseAndTryResponse(buf, read(child_fd, buf, 255),child_fd);
+        
         close(child_fd);
     }
     return EXIT_SUCCESS;

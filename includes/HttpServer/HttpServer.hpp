@@ -9,7 +9,7 @@ public:
     
     HttpServer(string ip);
 
-    virtual void parseClientRequest(unsigned char buf[255], int result);
+    virtual void parseAndTryResponse(unsigned char buf[255], int result, int child_fd);
 private:
 
 };

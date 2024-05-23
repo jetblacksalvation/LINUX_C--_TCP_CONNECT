@@ -10,7 +10,7 @@ std::vector<std::string> tokenize(std::string string){
             buffer += character;
         }
         else{
-            if( character != ' ' && seperateTokensBy.find(character)!=std::string::npos){
+            if( !isblank(character) && seperateTokensBy.find(character)!=std::string::npos){
                 if (buffer.size() >0){
                     tokens.push_back(buffer);
 
@@ -19,7 +19,7 @@ std::vector<std::string> tokenize(std::string string){
                 tokens.emplace_back(1,character);
                 //do not push, if ' ' !
             }
-            else if (character == ' '  && seperateTokensBy.find(character)!=std::string::npos){
+            else if (isblank(character) && seperateTokensBy.find(character)!=std::string::npos){
                 if (buffer.size() >0){
                     tokens.push_back(buffer);
 
