@@ -9,12 +9,13 @@ HttpServer::HttpServer(string ip) : TcpConnection(ip)
 void HttpServer::parseAndTryResponse(unsigned char buf[255], int result, int child_fd)
 {
     string str = (char*)((&buf[0]));
-    auto response = tokenize(str);
+    auto request = tokenize(str);
     uint64_t count = 0;
-    for(auto it : response)
+    for(auto it : request)
     {
+        string response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
         if(it == "GET"){
-	        write(child_fd, "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!", strlen("HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!")); // write(fd, char[]*, len);  
+	        write(child_fd,response.c_str(),response.size() );
         }
     }
     

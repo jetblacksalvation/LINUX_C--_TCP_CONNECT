@@ -18,10 +18,10 @@ public:
     void tcpConnect();
     virtual void parseAndTryResponse(unsigned char buf[255], int result, int child_fd);
     int acceptLoop();
-    static std::string getLocalIp();
     int GetSocketFd();
-
-    std::string IpAddr; 
+    static string getLocalIp();
+    // Public member variables
+    string IpAddr; 
 
 private:
     // Private member variables
