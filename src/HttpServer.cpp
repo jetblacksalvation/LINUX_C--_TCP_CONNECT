@@ -11,6 +11,8 @@ void HttpServer::parseAndTryResponse(unsigned char buf[255], int result, int chi
     string str = (char*)((&buf[0]));
     auto request = tokenize(str);
     uint64_t count = 0;
+    
+    
     for(auto it : request)
     {
         string response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";

@@ -10,24 +10,25 @@ public:
 
     // Constructors
     TcpConnection(std::string IpAddr);
-
+    
     // Destructor
     ~TcpConnection();
-
+    
     // Public member functions
     void tcpConnect();
+    
     virtual void parseAndTryResponse(unsigned char buf[255], int result, int child_fd);
-    int acceptLoop();
+    int AcceptLoop();
     int GetSocketFd();
+
     static string getLocalIp();
     // Public member variables
     string IpAddr; 
-
 private:
     // Private member variables
     int sock_port = 9999;
-    struct sockaddr_in socket_addr { .sin_family=AF_INET,.sin_port={ (htons((uint16_t)sock_port)) }, .sin_addr={.s_addr=INADDR_ANY}};
-    struct sockaddr full_addr{.sa_family=AF_INET,};
+    struct sockaddr_in socket_addr { .sin_family=AF_INET,.sin_port={ (htons((uint16_t)sock_port)) },.sin_addr={.s_addr=INADDR_ANY}};
+    struct sockaddr full_addr{.sa_family=AF_INET};
     int socket_fd = -1;
 };
 

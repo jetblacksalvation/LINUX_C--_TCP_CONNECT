@@ -43,7 +43,7 @@ void TcpConnection::tcpConnect()
     std::cout << "NO ERR" << std::endl;
     std::cout << "Hello, Server http://" << this->IpAddr << ":"<<this->sock_port << std::endl;
     listen(this->socket_fd, 1); // backlog = amount of pending requests from clients
-    acceptLoop();
+    AcceptLoop();
 }
 
 void TcpConnection::parseAndTryResponse(unsigned char buf[255], int result, int child_fd)
@@ -58,7 +58,7 @@ void TcpConnection::parseAndTryResponse(unsigned char buf[255], int result, int 
     // }
 }
 
-int TcpConnection::acceptLoop()
+int TcpConnection::AcceptLoop()
 {
     for (;;)
     {

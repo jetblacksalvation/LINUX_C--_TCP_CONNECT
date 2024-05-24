@@ -1,4 +1,5 @@
 #include "HttpFunctionality.hpp"
+#include "Tokenizer.hpp"
 #include <iostream>
 
 #include <string>
@@ -7,7 +8,18 @@
 #include <netdb.h>
 #include <net/if.h>
 #include <arpa/inet.h>
-std::string HttpFunctionality::getLocalIp()
+
+HttpFunctionality::Dictionary 
+HttpFunctionality::Dictionary::PopulateFromString(string str)
+{
+    _DictT DictionaryResult;
+
+
+}
+
+
+std::string      
+HttpFunctionality::getLocalIp()
 {
     struct ifaddrs *ifap, *ifa;
     struct sockaddr_in *sa;
